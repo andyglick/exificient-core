@@ -31,7 +31,7 @@ package com.siemens.ct.exi.values;
  * @version 0.9.7-SNAPSHOT
  */
 
-abstract public class AbstractBinaryValue extends AbstractValue {
+public abstract class AbstractBinaryValue extends AbstractValue {
 
 	protected final byte[] bytes;
 

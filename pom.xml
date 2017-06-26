@@ -1,17 +1,28 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+  http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>7</version>
+  </parent>
+
   <groupId>com.siemens.ct.exi</groupId>
   <artifactId>exificient-core</artifactId>
   <name>EXIficient-Core</name>
+
   <url>http://exificient.github.io/</url>
   <version>0.9.7-SNAPSHOT</version>
   <packaging>jar</packaging><!-- bundle -->
   <description>EXIficient is an open source implementation of the W3C Efficient XML Interchange
     (EXI) format specification written in the Java programming language. The EXI format is a very
     compact representation for the Extensible Markup Language (XML) Information Set that is intended
-    to simultaneously optimize performance and the utilization of computational resources. </description>
+    to simultaneously optimize performance and the utilization of computational resources.
+  </description>
   <organization>
     <name>Siemens AG</name>
     <url>http://www.siemens.com/corporate-technology/</url>
@@ -46,6 +57,20 @@
     <tag>HEAD</tag>
   </scm>
 
+  <properties>
+    <java.version>1.6</java.version>
+
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+    <maven.javadoc.skip>true</maven.javadoc.skip>
+    <maven.version>3.5.0</maven.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <surefire.reportFormat>plain</surefire.reportFormat>
+    <surefire.useFile>false</surefire.useFile>
+    <surefire.version>2.19.1</surefire.version>
+  </properties>
+
   <dependencies>
     <!-- Runtime Dependencies (schema-informed mode) -->
     <!--<dependency>
@@ -58,7 +83,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.11</version>
+      <version>4.12</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -84,13 +109,6 @@
 	</dependency>
 	-->
   </dependencies>
-
-  <properties>
-    <!-- maven-compiler-plugin configuration -->
-    <maven.compiler.source>1.5</maven.compiler.source>
-    <maven.compiler.target>1.5</maven.compiler.target>
-  </properties>
-
 
   <build>
     <finalName>exificient-core</finalName>
@@ -126,7 +144,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
-        <version>2.2.1</version>
+        <version>3.0.1</version>
         <!--2.3.2-->
         <executions>
           <execution>
@@ -146,7 +164,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.9.1</version>
+        <version>2.10.4</version>
         <!--2.3.2-->
         <configuration>
           <overview>${basedir}/src/main/java/overview.html</overview>
@@ -160,6 +178,7 @@
           </execution>
         </executions>
       </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
@@ -167,14 +186,93 @@
           <tagNameFormat>v@{project.version}</tagNameFormat>
         </configuration>
       </plugin>
+
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.0.1</version>
+      </plugin>
+      <plugin>
+        <artifactId>maven-help-plugin</artifactId>
+        <version>2.2</version>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+        <version>2.4</version>
+      </plugin>
     </plugins>
   </build>
 
-
-  <parent>
-    <groupId>org.sonatype.oss</groupId>
-    <artifactId>oss-parent</artifactId>
-    <version>7</version>
-  </parent>
-
+  <profiles>
+    <profile>
+      <id>jacoco</id>
+      <!--<activation>-->
+      <!--<activeByDefault>true</activeByDefault>-->
+      <!--</activation>-->
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>0.7.9</version>
+            <executions>
+              <execution>
+                <id>prepare</id>
+                <phase>process-test-classes</phase>
+                <goals>
+                  <goal>prepare-agent</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>report</id>
+                <phase>test</phase>
+                <goals>
+                  <goal>report</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>prepare-integration</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>prepare-agent-integration</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>verify</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>report-integration</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>toolchains</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-toolchains-plugin</artifactId>
+            <version>1.1</version>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>toolchain</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <toolchains>
+                <jdk>
+                  <version>1.6</version>
+                </jdk>
+              </toolchains>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>

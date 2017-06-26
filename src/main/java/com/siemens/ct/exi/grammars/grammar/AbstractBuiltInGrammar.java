@@ -123,14 +123,11 @@ public abstract class AbstractBuiltInGrammar extends AbstractGrammar implements
 	}
 
 	public Production getProduction(EventType eventType) {
-		for (int i = 0; i < containers.size(); i++) {
-			Production ei = containers.get(i);
-			if (ei.getEvent().isEventType(eventType)) {
-				if(!isExiProfilGhostNode(ei)) {
-					return ei;
-				}
-			}
-		}
+    for (Production ei : containers) {
+      if (ei.getEvent().isEventType(eventType) && !isExiProfilGhostNode(ei)) {
+        return ei;
+      }
+    }
 		
 		return null; // not found
 	}
@@ -146,16 +143,14 @@ public abstract class AbstractBuiltInGrammar extends AbstractGrammar implements
 
 	public Production getStartElementProduction(String namespaceURI,
 			String localName) {
-		for (int i = 0; i < containers.size(); i++) {
-			Production ei = containers.get(i);
-			if (ei.getEvent().isEventType(EventType.START_ELEMENT)
-					&& checkQualifiedName(((StartElement) ei.getEvent()).getQName(),
-							namespaceURI, localName)) {
-				if(!isExiProfilGhostNode(ei)) {
-					return ei;
-				}
-			}
-		}
+    for (Production ei : containers) {
+      if (ei.getEvent().isEventType(EventType.START_ELEMENT)
+        && checkQualifiedName(((StartElement) ei.getEvent()).getQName(),
+        namespaceURI, localName) && !isExiProfilGhostNode(ei)) {
+        return ei;
+      }
+    }
+
 		return null; // not found
 	}
 
@@ -163,18 +158,15 @@ public abstract class AbstractBuiltInGrammar extends AbstractGrammar implements
 		return null; // not found
 	}
 
-	public Production getAttributeProduction(String namespaceURI,
-			String localName) {
-		for (int i = 0; i < containers.size(); i++) {
-			Production ei = containers.get(i);
-			if (ei.getEvent().isEventType(EventType.ATTRIBUTE)
-					&& checkQualifiedName(((Attribute) ei.getEvent()).getQName(),
-							namespaceURI, localName)) {
-				if(!isExiProfilGhostNode(ei)) {
-					return ei;
-				}
-			}
-		}
+	public Production getAttributeProduction(String namespaceURI, String localName) {
+    for (Production ei : containers) {
+      if (ei.getEvent().isEventType(EventType.ATTRIBUTE)
+        && checkQualifiedName(((Attribute) ei.getEvent()).getQName(), namespaceURI, localName)
+        && !isExiProfilGhostNode(ei)) {
+        return ei;
+      }
+    }
+
 		return null; // not found
 	}
 
@@ -187,5 +179,4 @@ public abstract class AbstractBuiltInGrammar extends AbstractGrammar implements
 		assert (eventCode >= 0 && eventCode < containers.size());
 		return containers.get(getNumberOfEvents() - 1 - eventCode);
 	}
-
 }

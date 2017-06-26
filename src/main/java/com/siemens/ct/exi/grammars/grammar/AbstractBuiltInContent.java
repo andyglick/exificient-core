@@ -41,6 +41,7 @@ import com.siemens.ct.exi.types.BuiltIn;
  * @version 0.9.7-SNAPSHOT
  */
 
+@SuppressWarnings("WeakerAccess")
 public abstract class AbstractBuiltInContent extends AbstractBuiltInGrammar {
 
 	protected static final Map<FidelityOptions, List<EventType>> optionsStartTag;
@@ -58,21 +59,14 @@ public abstract class AbstractBuiltInContent extends AbstractBuiltInGrammar {
 		if (!optionsStartTag.containsKey(fidelityOptions)) {
 			List<EventType> events = new ArrayList<EventType>();
 
-			// if (!fidelityOptions.isStrict()) {
-			// extensibility: EE, AT(*)
 			events.add(EventType.END_ELEMENT_UNDECLARED);
 			events.add(EventType.ATTRIBUTE_GENERIC_UNDECLARED);
 
-			// NS
-			if (fidelityOptions
-					.isFidelityEnabled(FidelityOptions.FEATURE_PREFIX)) {
+			if (fidelityOptions.isFidelityEnabled(FidelityOptions.FEATURE_PREFIX)) {
 				events.add(EventType.NAMESPACE_DECLARATION);
-			}
-			// SC
-			if (fidelityOptions.isFidelityEnabled(FidelityOptions.FEATURE_SC)) {
+			} else if (fidelityOptions.isFidelityEnabled(FidelityOptions.FEATURE_SC)) {
 				events.add(EventType.SELF_CONTAINED);
 			}
-			// }
 
 			optionsStartTag.put(fidelityOptions, events);
 		}
@@ -85,17 +79,12 @@ public abstract class AbstractBuiltInContent extends AbstractBuiltInGrammar {
 		if (!optionsChildContent.containsKey(fidelityOptions)) {
 			List<EventType> events = new ArrayList<EventType>();
 
-			// if (!fidelityOptions.isStrict()) {
-			// extensibility: SE(*), CH
 			events.add(EventType.START_ELEMENT_GENERIC_UNDECLARED);
 			events.add(EventType.CHARACTERS_GENERIC_UNDECLARED);
 
-			// ER
 			if (fidelityOptions.isFidelityEnabled(FidelityOptions.FEATURE_DTD)) {
 				events.add(EventType.ENTITY_REFERENCE);
 			}
-
-			// }
 
 			optionsChildContent.put(fidelityOptions, events);
 		}
@@ -114,6 +103,4 @@ public abstract class AbstractBuiltInContent extends AbstractBuiltInGrammar {
 			learnedCH = true;
 		}
 	}
-
-
 }

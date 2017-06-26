@@ -49,7 +49,7 @@ public abstract class AbstractBinaryDatatype extends AbstractDatatype {
 		assert (binaryType == BuiltInType.BINARY_BASE64 || binaryType == BuiltInType.BINARY_HEX);
 	}
 
-	abstract protected boolean isValidString(String value);
+  protected abstract boolean isValidString(String value);
 
 	public boolean isValid(Value value) {
 		if (value instanceof AbstractBinaryValue) {

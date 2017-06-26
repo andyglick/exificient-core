@@ -91,15 +91,14 @@ public abstract class AbstractDatatype implements Datatype {
 	}
 
 	public boolean equals(Object o) {
-		if (o instanceof Datatype) {
-			if(builtInType == ((Datatype) o).getBuiltInType()) {
-				if(schemaType == null) {
-					return (((Datatype) o).getSchemaType() == null);
-				} else {
-					return (schemaType.equals(((Datatype) o).getSchemaType()));
-				}
-			}
-		}
+    if (o instanceof Datatype && builtInType == ((Datatype) o).getBuiltInType()) {
+      if (schemaType == null) {
+        return (((Datatype) o).getSchemaType() == null);
+      } else {
+        return (schemaType.equals(((Datatype) o).getSchemaType()));
+      }
+    }
+
 		return false;
 	}
 
